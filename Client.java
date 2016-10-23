@@ -49,7 +49,13 @@ public class Client{
 							Object obj=in.readObject();
 							messages.put(obj);
 						}catch(IOException e){
-							e.printStackTrace();
+							System.out.println("Disconnected from server");
+							try{
+								in.close();
+								out.close();						
+							}catch(IOException err){
+								err.printStackTrace();
+							}
 						}catch(ClassNotFoundException e){
 							e.printStackTrace();
 						}catch(InterruptedException e){

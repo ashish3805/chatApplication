@@ -27,6 +27,7 @@ public class Server
 					try{
 						Socket clientConnection=serverSocket.accept();
 						clients.add(new ClientConnection(clientConnection,"User"+(++clientNo),clients.size()));
+						System.out.println("User"+clientNo+" connected");
 					}catch(IOException e){
 						e.printStackTrace();
 					}
@@ -100,7 +101,16 @@ public class Server
 							Message m=new Message(name,index,obj);
 							messages.put(m);
 						}catch(IOException e){
-							e.printStackTrace();
+							try{
+								out.close();
+								in.close();
+							}catch(IOException err){
+								e.printStackTrace();
+							}
+							clients.remove(index);
+							System.out.println(name+" disconnected");
+							Thread.currentThread().interrupt();
+							return;
 						}catch(ClassNotFoundException e){
 							e.printStackTrace();
 						}catch(InterruptedException e){
